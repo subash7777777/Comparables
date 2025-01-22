@@ -85,4 +85,4 @@ def main():
         # Display the current subject property and comparables
         def display_subject_and_comparables(selected_index):
             st.write(f"Subject Property (Index {selected_index}):\n{result_df.iloc[selected_index][0]}")
-            st.write("\nComparables
+            st.write("\nComparables:")
