@@ -31,13 +31,13 @@ def find_comparables(subject_property, dataset):
     filtered_df = dataset[
         (dataset['Hotel Name'] != subject_property['Hotel Name']) &
         (dataset['Property Address'] != subject_property['Property Address']) &
-        (dataset['Owner Name/LLC Name'] != subject_property['Owner Name/LLC Name']) &
+        (dataset['Owner Name/ LLC Name'] != subject_property['Owner Name/ LLC Name']) &
         (dataset['Owner Street Address'] != subject_property['Owner Street Address']) &
         (dataset['Hotel Class'] == 'Economy') &
         (dataset['Type'] == 'Hotel') &
         (dataset['Market Value-2024'] >= subject_property['Market Value-2024'] - 100000) &
         (dataset['Market Value-2024'] <= subject_property['Market Value-2024'] + 100000) &
-        (dataset['VPU/VPR'] <= subject_property['VPU/VPR'] * 1.5)
+        (dataset['VPR'] <= subject_property['VPR'] * 1.5)
     ].copy()  # Create a copy of the filtered DataFrame
 
     # Calculate market value and VPU/VPR differences
@@ -60,7 +60,7 @@ def find_comparables(subject_property, dataset):
             'Property Address': comp['Property Address'],
             'Market Value-2024': comp['Market Value-2024'],
             'Hotel Class': comp['Hotel Class'],
-            'Owner Name/LLC Name': comp['Owner Name/LLC Name'],
+            'Owner Name/ LLC Name': comp['Owner Name/ LLC Name'],
             'Type': comp['Type'],
             'Owner Street Address': comp['Owner Street Address']
         })
