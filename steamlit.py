@@ -7,16 +7,12 @@ Original file is located at
     https://colab.research.google.com/drive/14_mK_FQylddDNhDq3RYLeWOjUId4e7zu
 """
 
-!pip install streamlit
+
 import streamlit as st # streamlit library is imported
 import pandas as pd
 import ipywidgets as widgets
 from IPython.display import display
 
-import streamlit as st
-import pandas as pd
-import ipywidgets as widgets
-from IPython.display import display
 
 def find_comparables(subject_property, dataset):
     """
