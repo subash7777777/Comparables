@@ -37,10 +37,10 @@ def find_comparables(subject_property, dataset):
     # Calculate differences
     filtered_df['Market_Value_Diff'] = abs(filtered_df['Market Value-2024'] - subject_property['Market Value-2024'])
     filtered_df['VPU_VPR_Diff'] = abs(filtered_df['VPR'] - subject_property['VPR'])
-    filtered_df['Combined_Diff'] = filtered_df['Market_Value_Diff'] + filtered_df['VPU_VPR_Diff']
+    
 
     # Sort and get the top 5
-    filtered_df = filtered_df.sort_values(by=['Combined_Diff', 'Market_Value_Diff', 'VPU_VPR_Diff']).head(5)
+    filtered_df = filtered_df.sort_values(by=['Market_Value_Diff', 'VPU_VPR_Diff']).head(5)
     return filtered_df
 
 def main():
