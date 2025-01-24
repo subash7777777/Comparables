@@ -211,52 +211,65 @@ def main():
         # Download button
 
       # Download button
+# Download button
 if st.button("Download Results"):
-    # Find comparables
-    comparables = find_comparables(subject_property, data)
+    # Initialize result dictionary
+    result_dict = {}
     
-    # Prepare the result dictionary with all the specified columns
-    result_dict = {
-        # Subject Property Columns
-        'VPR': [subject_property['VPR']],
-        'Hotel Name': [subject_property['Hotel Name']],
-        'Property Address': [subject_property['Property Address']],
-        'Market Value-2024': [subject_property['Market Value-2024']],
-        'Hotel Class': [subject_property['Hotel Class']],
-        'Owner Name/ LLC Name': [subject_property['Owner Name/ LLC Name']],
-        'Owner Street Address': [subject_property['Owner Street Address']],
-        'Type': [subject_property['Type']],
-        'account number': [subject_property['account number']]
-    }
+    # Process each row in the dataset
+    results_list = []
     
-    # Add Comparable Properties Columns (up to 5)
-    for i in range(5):
-        prefix = f'comp{i+1} '
-        if i < len(comparables):
-            comp = comparables.iloc[i]
-            result_dict[prefix + 'VPR'] = [comp['VPR']]
-            result_dict[prefix + 'Hotel Name'] = [comp['Hotel Name']]
-            result_dict[prefix + 'Property Address'] = [comp['Property Address']]
-            result_dict[prefix + 'Market Value-2024'] = [comp['Market Value-2024']]
-            result_dict[prefix + 'Hotel Class'] = [comp['Hotel Class']]
-            result_dict[prefix + 'Owner Name/ LLC Name'] = [comp['Owner Name/ LLC Name']]
-            result_dict[prefix + 'Owner Street Address'] = [comp['Owner Street Address']]
-            result_dict[prefix + 'Type'] = [comp['Type']]
-            result_dict[prefix + 'account number'] = [comp['account number']]
-        else:
-            # Fill with empty values if no comparable property exists
-            result_dict[prefix + 'VPR'] = [None]
-            result_dict[prefix + 'Hotel Name'] = [None]
-            result_dict[prefix + 'Property Address'] = [None]
-            result_dict[prefix + 'Market Value-2024'] = [None]
-            result_dict[prefix + 'Hotel Class'] = [None]
-            result_dict[prefix + 'Owner Name/ LLC Name'] = [None]
-            result_dict[prefix + 'Owner Street Address'] = [None]
-            result_dict[prefix + 'Type'] = [None]
-            result_dict[prefix + 'account number'] = [None]
+    for subject_index in range(len(data)):
+        # Select subject property
+        subject_property = data.iloc[subject_index]
+        
+        # Find comparables for this subject property
+        comparables = find_comparables(subject_property, data)
+        
+        # Prepare the result dictionary with all the specified columns
+        result_entry = {
+            # Subject Property Columns
+            'VPR': subject_property['VPR'],
+            'Hotel Name': subject_property['Hotel Name'],
+            'Property Address': subject_property['Property Address'],
+            'Market Value-2024': subject_property['Market Value-2024'],
+            'Hotel Class': subject_property['Hotel Class'],
+            'Owner Name/ LLC Name': subject_property['Owner Name/ LLC Name'],
+            'Owner Street Address': subject_property['Owner Street Address'],
+            'Type': subject_property['Type'],
+            'account number': subject_property['account number']
+        }
+        
+        # Add Comparable Properties Columns (up to 5)
+        for i in range(5):
+            prefix = f'comp{i+1} '
+            if i < len(comparables):
+                comp = comparables.iloc[i]
+                result_entry[prefix + 'VPR'] = comp['VPR']
+                result_entry[prefix + 'Hotel Name'] = comp['Hotel Name']
+                result_entry[prefix + 'Property Address'] = comp['Property Address']
+                result_entry[prefix + 'Market Value-2024'] = comp['Market Value-2024']
+                result_entry[prefix + 'Hotel Class'] = comp['Hotel Class']
+                result_entry[prefix + 'Owner Name/ LLC Name'] = comp['Owner Name/ LLC Name']
+                result_entry[prefix + 'Owner Street Address'] = comp['Owner Street Address']
+                result_entry[prefix + 'Type'] = comp['Type']
+                result_entry[prefix + 'account number'] = comp['account number']
+            else:
+                # Fill with empty values if no comparable property exists
+                result_entry[prefix + 'VPR'] = None
+                result_entry[prefix + 'Hotel Name'] = None
+                result_entry[prefix + 'Property Address'] = None
+                result_entry[prefix + 'Market Value-2024'] = None
+                result_entry[prefix + 'Hotel Class'] = None
+                result_entry[prefix + 'Owner Name/ LLC Name'] = None
+                result_entry[prefix + 'Owner Street Address'] = None
+                result_entry[prefix + 'Type'] = None
+                result_entry[prefix + 'account number'] = None
+        
+        results_list.append(result_entry)
     
-    # Create DataFrame from the dictionary
-    result_df = pd.DataFrame(result_dict)
+    # Create DataFrame from the list of results
+    result_df = pd.DataFrame(results_list)
     
     # Create an in-memory buffer for the Excel file
     output = io.BytesIO()
