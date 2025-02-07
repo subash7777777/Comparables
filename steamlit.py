@@ -5,7 +5,7 @@ import io
 def find_comparables(subject_property, dataset):
     """
     Finds the 5 most comparable properties for the given subject property,
-    ensuring the VPR value is within the specified range and all conditions are strictly met.
+    ensuring the VPU value is within the specified range and all conditions are strictly met.
 
     Args:
         subject_property: A pandas Series representing the subject property.
@@ -17,17 +17,17 @@ def find_comparables(subject_property, dataset):
 
     # Filter based on conditions
     filtered_df = dataset[
-        (dataset['Hotel Name'] != subject_property['Hotel Name']) &
+        (dataset['Apartment name'] != subject_property['Apartment name']) &
         (dataset['Property Address'] != subject_property['Property Address']) &
         (dataset['Owner Name/ LLC Name'] != subject_property['Owner Name/ LLC Name']) &
         (dataset['Owner Street Address'] != subject_property['Owner Street Address']) &
-        (dataset['Hotel Class'] == subject_property['Hotel Class']) &
+        (dataset['Class'] == subject_property['Class']) &
         (dataset['Type'] == 'Hotel') &
         (dataset['Market Value-2024'] >= subject_property['Market Value-2024'] - 100000) &
         (dataset['Market Value-2024'] <= subject_property['Market Value-2024'] + 100000) &
-        # VPR condition: between 50% and 100% of subject property's VPR (inclusive)
-        (dataset['VPR'] >= subject_property['VPR'] / 2) & 
-        (dataset['VPR'] <= subject_property['VPR']) 
+        # VPU condition: between 50% and 100% of subject property's VPU (inclusive)
+        (dataset['VPU'] >= subject_property['VPU'] / 2) & 
+        (dataset['VPU'] <= subject_property['VPU']) 
     ].copy()
 
     # If no properties match the criteria, return an empty DataFrame
@@ -36,11 +36,11 @@ def find_comparables(subject_property, dataset):
 
     # Calculate differences
     filtered_df['Market_Value_Diff'] = abs(filtered_df['Market Value-2024'] - subject_property['Market Value-2024'])
-    filtered_df['VPU_VPR_Diff'] = abs(filtered_df['VPR'] - subject_property['VPR'])
+    filtered_df['VPU_Diff'] = abs(filtered_df['VPU'] - subject_property['VPU'])
     
 
     # Sort and get the top 5
-    filtered_df = filtered_df.sort_values(by=['Market_Value_Diff', 'VPU_VPR_Diff']).head(5)
+    filtered_df = filtered_df.sort_values(by=['Market_Value_Diff', 'VPU_Diff']).head(5)
     return filtered_df
 
 def main():
@@ -119,11 +119,11 @@ def main():
                     # Prepare the result dictionary with all the specified columns
                     result_entry = {
                         # Subject Property Columns
-                        'VPR': subject_property['VPR'] if 'VPR' in data.columns else None,
-                        'Hotel Name': subject_property['Hotel Name'] if 'Hotel Name' in data.columns else None,
+                        'VPU': subject_property['VPU'] if 'VPU' in data.columns else None,
+                        'Apartment name': subject_property['Apartment name'] if 'Apartment name' in data.columns else None,
                         'Property Address': subject_property['Property Address'] if 'Property Address' in data.columns else None,
                         'Market Value-2024': subject_property['Market Value-2024'] if 'Market Value-2024' in data.columns else None,
-                        'Hotel Class': subject_property['Hotel Class'] if 'Hotel Class' in data.columns else None,
+                        'Class': subject_property['Class'] if 'Class' in data.columns else None,
                         'Owner Name/ LLC Name': subject_property['Owner Name/ LLC Name'] if 'Owner Name/ LLC Name' in data.columns else None,
                         'Owner Street Address': subject_property['Owner Street Address'] if 'Owner Street Address' in data.columns else None,
                         'Type': subject_property['Type'] if 'Type' in data.columns else None,
@@ -135,22 +135,22 @@ def main():
                         prefix = f'comp{i+1} '
                         if i < len(comparables):
                             comp = comparables.iloc[i]
-                            result_entry[prefix + 'VPR'] = comp['VPR'] if 'VPR' in comparables.columns else None
-                            result_entry[prefix + 'Hotel Name'] = comp['Hotel Name'] if 'Hotel Name' in comparables.columns else None
+                            result_entry[prefix + 'VPU'] = comp['VPU'] if 'VPU' in comparables.columns else None
+                            result_entry[prefix + 'Apartment name'] = comp['Apartment name'] if 'Apartment name' in comparables.columns else None
                             result_entry[prefix + 'Property Address'] = comp['Property Address'] if 'Property Address' in comparables.columns else None
                             result_entry[prefix + 'Market Value-2024'] = comp['Market Value-2024'] if 'Market Value-2024' in comparables.columns else None
-                            result_entry[prefix + 'Hotel Class'] = comp['Hotel Class'] if 'Hotel Class' in comparables.columns else None
+                            result_entry[prefix + 'Class'] = comp['Class'] if 'Class' in comparables.columns else None
                             result_entry[prefix + 'Owner Name/ LLC Name'] = comp['Owner Name/ LLC Name'] if 'Owner Name/ LLC Name' in comparables.columns else None
                             result_entry[prefix + 'Owner Street Address'] = comp['Owner Street Address'] if 'Owner Street Address' in comparables.columns else None
                             result_entry[prefix + 'Type'] = comp['Type'] if 'Type' in comparables.columns else None
                             result_entry[prefix + 'account number'] = comp['account number'] if 'account number' in comparables.columns else None
                         else:
                             # Fill with empty values if no comparable property exists
-                            result_entry[prefix + 'VPR'] = None
-                            result_entry[prefix + 'Hotel Name'] = None
+                            result_entry[prefix + 'VPU'] = None
+                            result_entry[prefix + 'Apartment name'] = None
                             result_entry[prefix + 'Property Address'] = None
                             result_entry[prefix + 'Market Value-2024'] = None
-                            result_entry[prefix + 'Hotel Class'] = None
+                            result_entry[prefix + 'Class'] = None
                             result_entry[prefix + 'Owner Name/ LLC Name'] = None
                             result_entry[prefix + 'Owner Street Address'] = None
                             result_entry[prefix + 'Type'] = None
