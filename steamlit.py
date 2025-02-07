@@ -22,7 +22,7 @@ def find_comparables(subject_property, dataset):
         (dataset['Owner Name/ LLC Name'] != subject_property['Owner Name/ LLC Name']) &
         (dataset['Owner Street Address'] != subject_property['Owner Street Address']) &
         (dataset['Class'] == subject_property['Class']) &
-        (dataset['Type'] == 'Hotel') &
+        (dataset['Type'] == 'Apartment') &
         (dataset['Market Value-2024'] >= subject_property['Market Value-2024'] - 100000) &
         (dataset['Market Value-2024'] <= subject_property['Market Value-2024'] + 100000) &
         # VPU condition: between 50% and 100% of subject property's VPU (inclusive)
